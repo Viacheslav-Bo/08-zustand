@@ -1,17 +1,26 @@
-// /notes – сторінка списку нотатків. На цій сторінці відображається перелік усіх
-// створених нотаток. Реалізовано функцію пошуку за ключовим словом, а також можливість
-// створення нової нотатки.
+// // app/notes/page.tsx
 
-// /notes/[id] – сторінка деталей однієї нотатки (динамічний маршрут). На цій сторінці
-// відображається повна інформація про одну нотатку за її id
-import css from './NotesPage.module.css';
-import { Metadata } from 'next';
+import {
+  QueryClient,
+  HydrationBoundary,
+  dehydrate,
+} from '@tanstack/react-query';
+import { getNotes } from '@/lib/api';
+import NotesClient from './Notes.client';
 
-export const metadata: Metadata = {
-  title: 'Notes',
-  description: 'Notes desc',
-};
+export default async function Notes() {
+  const queryClient = new QueryClient();
 
-export default function Notes() {
-  return <h1>Hello</h1>;
+  const initialParams = { page: 1, perPage: 12, search: '' };
+
+  await queryClient.prefetchQuery({
+    queryKey: ['notes', initialParams],
+    queryFn: () => getNotes(initialParams),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesClient initialParams={initialParams} />
+    </HydrationBoundary>
+  );
 }
