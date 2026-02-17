@@ -13,10 +13,8 @@ export interface ModalProps {
 }
 
 export default function Modal({ children, onClose }: ModalProps) {
-  const modalRoot =
-    typeof document !== 'undefined'
-      ? document.getElementById('modal-root')
-      : null;
+  const modalRoot = typeof document !== 'undefined' ? document.body : null;
+
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
