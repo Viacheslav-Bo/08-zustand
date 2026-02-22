@@ -1,6 +1,3 @@
-// Сторінка Not found
-//
-
 import css from './Home.module.css';
 import styles from './page.module.css';
 
