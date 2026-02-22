@@ -8,9 +8,31 @@ import {
 import { getNotes, type GetNoteParams } from '@/lib/api';
 import { type NoteTag } from '@/types/note';
 import NotesClient from './Notes.client';
+import type { Metadata } from 'next';
 
 interface NotesByCatgoryProps {
   params: Promise<{ slug: string[] }>;
+}
+
+export async function generateMetadata({
+  params,
+}: NotesByCatgoryProps): Promise<Metadata> {
+  const { slug } = await params;
+  const filter = slug?.[0] ?? 'all';
+  const title = `Notes: ${filter} | NoteHub`;
+  const description = `Notes page filtered by: ${filter}.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/notes/filter/${slug.join('/')}` },
+    openGraph: {
+      title,
+      description,
+      url: `https://notehub.com/notes/filter/${slug.join('/')}`,
+      images: ['https://ac.goit.global/fullstack/react/notehub-og-meta.jpg'],
+    },
+  };
 }
 
 export default async function NotesByCategory({ params }: NotesByCatgoryProps) {
