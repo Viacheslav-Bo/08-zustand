@@ -54,7 +54,7 @@ export default async function NotesByCategory({ params }: NotesByCatgoryProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient initialParams={initialParams} />
+      <NotesClient initialParams={initialParams} tag={tag} />
     </HydrationBoundary>
   );
 }

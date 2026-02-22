@@ -14,20 +14,26 @@ import Pagination from '@/components/Pagination/Pagination';
 // import Modal from '@/components/Modal/Modal';
 // import NoteForm from '@/components/NoteForm/NoteForm';
 import Link from 'next/link';
+import type { NoteTag } from '@/types/note';
 
 const PER_PAGE = 12;
 
-function NotesClient({ initialParams }: { initialParams?: GetNoteParams }) {
+function NotesClient({
+  initialParams,
+  tag,
+}: {
+  initialParams?: GetNoteParams;
+  tag?: NoteTag;
+}) {
   const [inputValue, setInputValue] = useState(initialParams?.search ?? '');
   const [searchQuery, setSearchQuery] = useState(initialParams?.search ?? '');
   const [currentPage, setCurrentPage] = useState(initialParams?.page ?? 1);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const params: GetNoteParams = {
     page: currentPage,
     perPage: initialParams?.perPage ?? PER_PAGE,
     search: searchQuery.trim() || undefined,
-    ...(initialParams?.tag ? { tag: initialParams.tag } : {}),
+    ...(tag ? { tag } : {}),
   };
 
   const { data, isFetching } = useQuery({
